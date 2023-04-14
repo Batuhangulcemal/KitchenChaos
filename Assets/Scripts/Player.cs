@@ -7,14 +7,27 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotateSpeed = 7f;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private LayerMask countersLayerMask;
 
     private float playerRadius = 0.7f;
     private float playerHeight = 2f;
 
     private bool isWalking;
+    private Vector3 lastInteractDir;
     private void Update()
     {
+        HandleMovement();
+        HandeInteractions();
+    }
 
+    public bool IsWalking()
+    {
+        return isWalking;
+    }
+
+
+    private void HandleMovement()
+    {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDir = new(inputVector.x, 0, inputVector.y);
@@ -51,9 +64,24 @@ public class Player : MonoBehaviour
         isWalking = moveDir != Vector3.zero;
         transform.forward = Vector3.Lerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
-
-    public bool IsWalking()
+    private void HandeInteractions()
     {
-        return isWalking;
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+
+        Vector3 moveDir = new(inputVector.x, 0, inputVector.y);
+
+        if(moveDir != Vector3.zero)
+        {
+            lastInteractDir = moveDir;
+        }
+
+        float interactDistance = 2f;
+        if(Physics.Raycast(transform.position, lastInteractDir, out RaycastHit hit, interactDistance, countersLayerMask))
+        {
+            if(hit.transform.TryGetComponent(out ClearCounter clearCounter))
+            {
+                clearCounter.Interact();
+            }
+        }
     }
 }
