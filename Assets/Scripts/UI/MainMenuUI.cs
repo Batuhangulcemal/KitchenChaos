@@ -14,6 +14,8 @@ public class MainMenuUI : MonoBehaviour
     {
         playButton.onClick.AddListener(() => PlayButtonPressed());
         quitButton.onClick.AddListener(() => QuitButtonPressed());
+
+        Time.timeScale = 1f;
     }
 
     private void PlayButtonPressed()
