@@ -38,7 +38,8 @@ public class GamePauseUI : MonoBehaviour
 
     private void OptionsButtonPressed()
     {
-        OptionsUI.Instance.Show();
+        Hide();
+        OptionsUI.Instance.Show(Show);
     }
 
     private void KitchenGameManager_OnGameUnpaused(object sender, System.EventArgs e)
@@ -49,11 +50,13 @@ public class GamePauseUI : MonoBehaviour
     private void KitchenGameManager_OnGamePaused(object sender, System.EventArgs e)
     {
         Show();
+
     }
 
     private void Show()
     {
         gameObject.SetActive(true);
+        resumeButton.Select();
     }
 
     private void Hide()

@@ -35,6 +35,7 @@ public class OptionsUI : MonoBehaviour
 
     [SerializeField] private Transform pressToRebindKeyTransform;
 
+    private Action onCloseButtonAction;
 
     private void Awake()
     {
@@ -66,9 +67,11 @@ public class OptionsUI : MonoBehaviour
         Hide();
     }
 
-    public void Show()
+    public void Show(Action onCloseButtonAction)
     {
+        this.onCloseButtonAction = onCloseButtonAction;
         gameObject.SetActive(true);
+        soundEffectsButton.Select();
     }
 
     public void Hide()
@@ -90,6 +93,7 @@ public class OptionsUI : MonoBehaviour
     } 
     private void CloseButtonPressed()
     {
+        onCloseButtonAction();
         Hide();
     }
 
